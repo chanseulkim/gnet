@@ -1,0 +1,4 @@
+package gnet
+
+func main() {
+}

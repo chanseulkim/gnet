@@ -1,4 +1,4 @@
-package netlib
+package gnet
 
 type MsgBuff struct {
 	Data []byte

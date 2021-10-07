@@ -1,4 +1,4 @@
-package netlib
+package gnet
 
 type Float float32
 

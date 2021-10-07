@@ -1,4 +1,4 @@
-package netlib
+package gnet
 
 // import "dedicate_server/gcore"
 
