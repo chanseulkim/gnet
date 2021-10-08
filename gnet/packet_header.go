@@ -1,11 +1,11 @@
 package gnet
 
 const (
-	TYPE_HEADERTYPE_CMD  byte = 0
-	TYPE_HEADERTYPE_SYNC byte = 1
-	TYPE_HEADERTYPE_MSG  byte = 2
-	//don't use TYPE_HEADERTYPE_END
-	TYPE_HEADERTYPE_END byte = 8
+	TYPE_HEADER_CMD  byte = 0
+	TYPE_HEADER_SYNC byte = 1
+	TYPE_HEADER_MSG  byte = 2
+	//don't use TYPE_HEADER_END
+	TYPE_HEADER_END byte = 8
 )
 const (
 	HEADER_LENGTH = 2
@@ -20,7 +20,7 @@ type GHeader struct {
 }
 
 func (h *GHeader) SetHeader(header_type byte) bool {
-	if header_type >= TYPE_HEADERTYPE_END {
+	if header_type >= TYPE_HEADER_END {
 		return false
 	}
 	h.header_type = header_type

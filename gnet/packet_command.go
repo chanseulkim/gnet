@@ -17,7 +17,7 @@ type CmdPacket struct {
 
 func NewCmdPacket(command_type byte, data []byte, data_size int32) *CmdPacket {
 	return &CmdPacket{
-		header:       &GHeader{header_type: TYPE_HEADERTYPE_CMD},
+		header:       &GHeader{header_type: TYPE_HEADER_CMD},
 		command_type: command_type,
 		buff:         data,
 		buff_len:     data_size,
