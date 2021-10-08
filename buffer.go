@@ -13,9 +13,9 @@ func NewMsgBuff(data []byte, data_size int) *MsgBuff {
 	return &buff
 }
 
-func (self *MsgBuff) Write(data []byte, data_size int) {
-	copy(self.Data[self.Size:], data)
-	self.Size += data_size
+func (node *MsgBuff) Write(data []byte, data_size int) {
+	copy(node.Data[node.Size:], data)
+	node.Size += data_size
 }
 
 // func Serialize(obj *gcore.GObject) []byte {

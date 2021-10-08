@@ -1,7 +1,7 @@
 package gnet
 
 import (
-	serialization "libgnet/serialization"
+	serialization "gnet/serialization"
 
 	flatbuffers "github.com/google/flatbuffers/go"
 )
