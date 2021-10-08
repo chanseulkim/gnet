@@ -9,7 +9,7 @@ type SyncPacket struct {
 
 func NewSyncPacket(object_type byte, data []byte, data_size int32) *SyncPacket {
 	return &SyncPacket{
-		header:      &GHeader{header_type: TYPE_HEADER_SYNC},
+		header:      NewGHeader(TYPE_HEADER_SYNC),
 		object_type: object_type,
 		buff:        data,
 		buff_len:    data_size,

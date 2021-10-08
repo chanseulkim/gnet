@@ -15,18 +15,23 @@ const (
 // |header type|command type|
 // |  0 0 0 0  |  0 0 0 0  |
 type GHeader struct {
-	header_type byte
-	buffer      [HEADER_LENGTH]byte
+	//header_type byte
+	buffer [HEADER_LENGTH]byte
 }
 
-func (h *GHeader) SetHeader(header_type byte) bool {
+func NewGHeader(header_type byte) *GHeader {
 	if header_type >= TYPE_HEADER_END {
-		return false
+		return nil
 	}
-	h.header_type = header_type
+	h := &GHeader{}
 	h.buffer[0] = header_type
-	return true
+	return h
 }
+func ParseHeader(buff []byte) *GHeader {
+	htype := buff[0]
+	return NewGHeader(htype)
+}
+
 func (h *GHeader) GetBytes() [HEADER_LENGTH]byte {
 	return h.buffer
 }
