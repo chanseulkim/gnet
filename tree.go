@@ -92,6 +92,41 @@ func (node *QuadNode) GetAllObjects() *list.List {
 	}
 	return objlist
 }
+func (node *QuadNode) GetAllObjectsToCh(objs_ch chan *list.List) {
+	objs_ch <- node.objs
+	if node.TopLeft != nil {
+		if !node.TopLeft.IsLeaf() {
+			objs_ch <- node.TopLeft.GetAllObjects()
+		} else {
+			objs_ch <- node.TopLeft.objs
+		}
+	}
+	if node.TopRight != nil {
+		if !node.TopRight.IsLeaf() {
+			objs_ch <- node.TopRight.GetAllObjects()
+		} else {
+			objs_ch <- node.TopRight.objs
+		}
+	}
+	if node.BottomLeft != nil {
+		if !node.BottomLeft.IsLeaf() {
+			objs_ch <- node.BottomLeft.GetAllObjects()
+		} else {
+			objs_ch <- node.BottomLeft.objs
+		}
+	}
+	if node.BottomRight != nil {
+		if !node.BottomRight.IsLeaf() {
+			objs_ch <- node.BottomRight.GetAllObjects()
+		} else {
+			objs_ch <- node.BottomRight.objs
+		}
+	}
+	if node.NodeSector == NODE_ROOT {
+		close(objs_ch)
+	}
+}
+
 func NewQuadTreeRoot(x int, y int) *QuadNode {
 	return NewQuadNode(0, true, int(x), int(y), Vector2{X: 0, Y: 0}, Vector2{X: x, Y: y}, nil, NODE_ROOT)
 }

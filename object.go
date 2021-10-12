@@ -23,10 +23,11 @@ func NewGObject(id int, name string, pos Vector2, radius int) *GObject {
 			TopLeft:  Vector2{X: pos.X - radius, Y: pos.Y - radius},
 			BotRight: Vector2{X: pos.X + radius, Y: pos.Y + radius},
 		},
+		Radius: radius,
 	}
 }
 
-func (obj *GObject) Serialize() ([]byte, int) {
+func (obj *GObject) Serialize() ([]byte, uint32) {
 	builder := flatbuffers.NewBuilder(1024)
 	name_offset := builder.CreateString(obj.Name)
 	serialization.SzGObjectStart(builder)
@@ -43,5 +44,17 @@ func (obj *GObject) Serialize() ([]byte, int) {
 	endpos := serialization.SzGObjectEnd(builder)
 	builder.Finish(endpos)
 	bytes := builder.FinishedBytes()
-	return bytes, len(bytes)
+	return bytes, uint32(endpos)
+}
+func (o *GObject) Deserialization(buff []byte) *GObject {
+	szobj := serialization.GetRootAsSzGObject(buff, 0)
+	var v *serialization.SzVector2
+	szpos := szobj.Pos(v)
+	o = NewGObject(
+		int(szobj.Id()),
+		string(szobj.Name()),
+		Vector2{X: int(szpos.X()), Y: int(szpos.Y())},
+		int(szobj.Radius()),
+	)
+	return o
 }
