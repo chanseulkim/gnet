@@ -44,12 +44,16 @@ func (obj *GObject) Serialize() ([]byte, uint32) {
 	endpos := serialization.SzGObjectEnd(builder)
 	builder.Finish(endpos)
 	bytes := builder.FinishedBytes()
-	return bytes, uint32(endpos)
+	return bytes, uint32(len(bytes))
 }
-func (o *GObject) Deserialization(buff []byte) *GObject {
+
+func (o *GObject) Deserialize(buff []byte) *GObject {
 	szobj := serialization.GetRootAsSzGObject(buff, 0)
 	var v *serialization.SzVector2
 	szpos := szobj.Pos(v)
+	if szpos == nil {
+		return nil
+	}
 	o = NewGObject(
 		int(szobj.Id()),
 		string(szobj.Name()),

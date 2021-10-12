@@ -59,6 +59,7 @@ func (node *QuadNode) IsLeaf() bool {
 }
 
 // 자식 노드들이 가진 모든 오브젝트들 반환
+// TODO: 변화가 있는 오브젝트들만 추출
 func (node *QuadNode) GetAllObjects() *list.List {
 	var objlist *list.List = list.New()
 	objlist.PushBackList(node.objs)
@@ -92,6 +93,8 @@ func (node *QuadNode) GetAllObjects() *list.List {
 	}
 	return objlist
 }
+
+// TODO: 변화가 있는 오브젝트들만 추출
 func (node *QuadNode) GetAllObjectsToCh(objs_ch chan *list.List) {
 	objs_ch <- node.objs
 	if node.TopLeft != nil {
