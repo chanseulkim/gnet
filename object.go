@@ -54,11 +54,10 @@ func (o *GObject) Deserialize(buff []byte) *GObject {
 	if szpos == nil {
 		return nil
 	}
-	o = NewGObject(
+	return NewGObject(
 		int(szobj.Id()),
 		string(szobj.Name()),
 		Vector2{X: int(szpos.X()), Y: int(szpos.Y())},
 		int(szobj.Radius()),
 	)
-	return o
 }

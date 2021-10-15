@@ -5,10 +5,6 @@ import (
 	"net"
 )
 
-// // * Pakcet format
-// // * requirements : user_id;command;
-// // * user_id;command;action;delta-time;
-
 const MAX_BUFFSIZE = 1500
 
 func send(to *net.Addr, buf []byte, buf_len int) (int, error) {

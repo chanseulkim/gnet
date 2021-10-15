@@ -2,8 +2,6 @@ package gnet
 
 import (
 	"container/list"
-	"fmt"
-	"strconv"
 	"strings"
 	"unsafe"
 )
@@ -51,20 +49,23 @@ type GPacket struct {
 	data_size   uint32
 }
 
-func (p *GPacket) GetBytes() []byte {
+func (p *GPacket) GetData() []byte {
 	return p.data
 }
-func (p *GPacket) GetBytesLength() uint32 {
+func (p *GPacket) GetBytes() []byte {
+	return append(p.header_buff[:], p.data...)
+}
+func (p *GPacket) GetDataLength() uint32 {
 	return p.data_size
 }
 
-func NewGPacket(header_type byte, pack_type byte, cmd_type byte, data []byte) *GPacket {
+func NewGPacket(header_type HeaderType, pack_type PacketType, cmd_type CommandType, data []byte) *GPacket {
 	p := &GPacket{}
 	p.header_buff[0] = 0
-	p.header_buff[0] |= header_type << 4
-	p.header_buff[0] |= pack_type
+	p.header_buff[0] |= byte(header_type) << 4
+	p.header_buff[0] |= byte(pack_type)
 
-	p.header_buff[1] = cmd_type
+	p.header_buff[1] = byte(cmd_type)
 	p.data = data
 	return p
 }
@@ -88,7 +89,7 @@ func NewMovePacket(pack_type byte, user_id string, to *Vector2) *GPacket {
 	p.header_buff[0] |= pack_type
 	p.header_buff[1] = byte(TYPE_COMMAND_MOVE)
 
-	p.data = []byte(user_id + ";" + v2Str(*to))
+	p.data = []byte(user_id + ";" + V2Str(*to))
 	return p
 }
 
@@ -105,7 +106,7 @@ func ParseCommandData(data []byte) (string, Vector2) {
 		case 0:
 			user_id = string(str[0:token_pos])
 		case 1: // pos
-			pos, _ = posStr2V2(string(str[0:token_pos]))
+			pos, _ = PosStr2V2(string(str[0:token_pos]))
 		case 3:
 		default:
 			return user_id, pos
@@ -157,25 +158,4 @@ func ParseSyncData(data []byte) []*GObject {
 		data_offset += data_size
 	}
 	return objects
-}
-
-//////////////////////////////////////////////////////////////
-// "(40, 40)" -> x:40, y:40 int Vector2
-func posStr2V2(str string) (Vector2, error) {
-	str = strings.Trim(str, "()")
-	tok := ", "
-	p := strings.Index(str, tok)
-	if p == -1 {
-		return Vector2{}, fmt.Errorf("invalid value " + str)
-	}
-	x, _ := strconv.ParseFloat(str[:p], 32)
-	y, _ := strconv.ParseFloat(str[p+len(tok):], 32)
-	v := Vector2{int(x), int(y)}
-	return v, nil
-}
-func ToPosString(x int, y int) string {
-	return "(" + strconv.Itoa(int(x)) + ", " + strconv.Itoa(int(y)) + ")"
-}
-func v2Str(v Vector2) string {
-	return "(" + strconv.Itoa(int(v.X)) + ", " + strconv.Itoa(int(v.Y)) + ")"
 }
